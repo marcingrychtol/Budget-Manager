@@ -11,27 +11,23 @@ public class App {
 
     public static void main(String[] args) {
 
-        showMenu();
 
         String message;
         while (scanner.hasNextLine()) {
+            showMenu();
             message = scanner.nextLine();
-            if (message.isEmpty()){
+            if (message.isEmpty() || message.contains("0")){
                 break;
             }
-
-            account.addPurchase(message);
-            if (!message.isEmpty()){
-                summary += Double.parseDouble(message.split("\\$")[1]);
-            }
+            readInput(Integer.parseInt(message));
         }
-
-        for (String string :
-                purchases) {
-            System.out.println(string);
-        }
-        System.out.println();
-        System.out.println("Total: $"+summary);
+//
+//        for (String string :
+//                purchases) {
+//            System.out.println(string);
+//        }
+//        System.out.println();
+//        System.out.println("Total: $"+summary);
 
     }
     public static void showMenu() {
@@ -42,24 +38,16 @@ public class App {
         System.out.println("0) Exit");
     }
 
-    private static int tempInput;
 
-    public static void readInput(String input) {
-        if (input.isEmpty()) {
-            return;
-        }
-        tempInput = Integer.parseInt(input);
-        switch (tempInput) {
-            case 0:{
-                return;
-            }
+    public static void readInput(int command) {
+        switch (command) {
             case 1:{
-
-                account.addIncome(scanner.nextDouble());
+                account.addIncome(scanner.nextLine());
                 break;
             }
             case 2:{
-                account.addPurchase(scanner.nextLine());
+                account.addPurchaseTitle(scanner.nextLine());
+                account.addPurchasePrice(scanner.nextLine());
                 break;
             }
             case 3:{
@@ -67,11 +55,10 @@ public class App {
                 break;
             }
             case 4:{
-
+                account.printBalance();
                 break;
             }
             default:{
-
                 return;
             }
         }

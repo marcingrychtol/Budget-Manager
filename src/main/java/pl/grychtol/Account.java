@@ -8,19 +8,18 @@ public class Account {
     private double lastIncome = 0.0;
     private List<String> history = new LinkedList<>();
 
-    public double getBalance() {
-        return balance;
+    public void printBalance() {
+        System.out.println(balance);
     }
 
     public double getLastIncome() {
         return lastIncome;
     }
 
-    public void addIncome(double income) {
+    public void addIncome(String income) {
         System.out.println("Enter income:");
-
-        this.lastIncome = income;
-        this.balance += income;
+        this.lastIncome = Double.parseDouble(income);
+        this.balance += this.lastIncome;
         System.out.println("Income was added!");
 
     }
@@ -29,11 +28,15 @@ public class Account {
         System.out.println(history.toString());
     }
 
-    public void addPurchase(String purchase) {
+    public void addPurchaseTitle(String purchase) {
         System.out.println("Enter purchase name:");
-
         this.history.add(purchase);
         System.out.println("Income was added!");
+    }
+
+    public void addPurchasePrice(String price){
+        this.balance -= Double.parseDouble(price);
+        this.history.get(history.size()-1).concat(price);
     }
 }
 
