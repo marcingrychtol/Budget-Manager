@@ -17,6 +17,7 @@ public class App {
             showMenu();
             message = scanner.nextLine();
             if (message.isEmpty() || message.contains("0")){
+                System.out.println("Bye!");
                 break;
             }
             readInput(Integer.parseInt(message));
