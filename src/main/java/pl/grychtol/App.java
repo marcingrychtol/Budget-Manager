@@ -51,7 +51,7 @@ public class App {
                 break;
             }
             case 3:{
-                account.printHistory();
+                account.showPurchases();
                 break;
             }
             case 4:{

@@ -5,11 +5,12 @@ import java.util.List;
 
 public class Account {
     private double balance = 0.0;
+    private double totalSpend = 0.0;
     private double lastIncome = 0.0;
     private List<String> history = new LinkedList<>();
 
     public void printBalance() {
-        System.out.println(balance);
+        System.out.println("Balance: $"+balance);
     }
 
     public double getLastIncome() {
@@ -24,8 +25,9 @@ public class Account {
 
     }
 
-    public void printHistory() {
+    public void showPurchases() {
         System.out.println(history.toString());
+        System.out.println("Total sum: $"+totalSpend);
     }
 
     public void addPurchaseTitle(String purchase) {
@@ -36,6 +38,7 @@ public class Account {
 
     public void addPurchasePrice(String price){
         this.balance -= Double.parseDouble(price);
+        this.totalSpend += Double.parseDouble(price);
         this.history.get(history.size()-1).concat(price);
     }
 }
