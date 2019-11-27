@@ -8,29 +8,30 @@ import java.util.*;
 public class App {
     static Account account = new Account();
     static Scanner scanner = new Scanner(System.in);
+    public static boolean switcher = true;
 
     public static void main(String[] args) {
 
-
-        String message;
-        while (true) {
+        while (switcher) {
             showMenu();
-            message = scanner.nextLine();
-            if (message.isEmpty() || message.contains("0")){
-                System.out.println("Bye!");
-                break;
-            }
-            readInput(Integer.parseInt(message));
+            readCommand();
         }
 
     }
 
-    public static void readInput(int command) {
+    public static void readCommand() {
+        int command = scanner.nextInt();
+        if (command == 0){
+            System.out.println("Bye!");
+            switcher = false;
+            return;
+        }
         switch (command) {
             case 1:{
                 System.out.println("Enter income:");
                 account.addIncome(scanner.nextLine());
                 System.out.println("Income was added!");
+                System.out.println();
                 break;
             }
             case 2:{
@@ -39,21 +40,25 @@ public class App {
                 System.out.println("Enter its price:");
                 account.addPurchasePrice(scanner.nextLine());
                 System.out.println("Purchase was added!");
+                System.out.println();
                 break;
             }
             case 3:{
                 account.showPurchases();
+                System.out.println();
                 break;
             }
             case 4:{
                 account.printBalance();
+                System.out.println();
                 break;
             }
             default:{
-                return;
+                break;
             }
         }
     }
+
     public static void showMenu() {
         System.out.println("Choose your action:");
         System.out.println("1) Add income");
