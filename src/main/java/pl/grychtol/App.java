@@ -6,12 +6,12 @@ import java.util.*;
  * Hello world!
  */
 public class App {
-    static List<String> purchases = new LinkedList<>();
-    private static double summary = 0.0;
+    static Account account;
+    static Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
+        showMenu();
 
         String message;
         while (scanner.hasNextLine()) {
@@ -20,9 +20,7 @@ public class App {
                 break;
             }
 
-            purchases.add(message);
-//        System.out.println(temp.length);
-//        System.out.println(temp[1]);
+            account.addPurchase(message);
             if (!message.isEmpty()){
                 summary += Double.parseDouble(message.split("\\$")[1]);
             }
@@ -53,19 +51,19 @@ public class App {
         tempInput = Integer.parseInt(input);
         switch (tempInput) {
             case 0:{
-
-                break;
+                return;
             }
             case 1:{
 
+                account.addIncome(scanner.nextDouble());
                 break;
             }
             case 2:{
-
+                account.addPurchase(scanner.nextLine());
                 break;
             }
             case 3:{
-
+                account.printHistory();
                 break;
             }
             case 4:{

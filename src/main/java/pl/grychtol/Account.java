@@ -5,33 +5,35 @@ import java.util.List;
 
 public class Account {
     private double balance = 0.0;
-    private double income = 0.0;
+    private double lastIncome = 0.0;
     private List<String> history = new LinkedList<>();
 
     public double getBalance() {
         return balance;
     }
 
-    public Account setBalance(double balance) {
-        this.balance = balance;
-        return this;
+    public double getLastIncome() {
+        return lastIncome;
     }
 
-    public double getIncome() {
-        return income;
+    public void addIncome(double income) {
+        System.out.println("Enter income:");
+
+        this.lastIncome = income;
+        this.balance += income;
+        System.out.println("Income was added!");
+
     }
 
-    public Account setIncome(double income) {
-        this.income = income;
-        return this;
+    public void printHistory() {
+        System.out.println(history.toString());
     }
 
-    public List<String> getHistory() {
-        return history;
-    }
+    public void addPurchase(String purchase) {
+        System.out.println("Enter purchase name:");
 
-    public Account setHistory(List<String> history) {
-        this.history = history;
-        return this;
+        this.history.add(purchase);
+        System.out.println("Income was added!");
     }
 }
+
