@@ -18,10 +18,8 @@ public class Account {
     }
 
     public void addIncome(String income) {
-        System.out.println("Enter income:");
         this.lastIncome = Double.parseDouble(income);
         this.balance += this.lastIncome;
-        System.out.println("Income was added!");
     }
 
     public void showPurchases() {
@@ -36,16 +34,13 @@ public class Account {
     }
 
     public void addPurchaseTitle(String purchase) {
-        System.out.println("Enter purchase name:");
         this.history.add(purchase);
     }
 
     public void addPurchasePrice(String price) {
-        System.out.println("Enter its price:");
         this.balance -= Double.parseDouble(price);
         this.totalSpend += Double.parseDouble(price);
         this.history.get(history.size() - 1).concat(price);
-        System.out.println("Income was added!");
     }
 }
 
