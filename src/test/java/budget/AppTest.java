@@ -1,4 +1,4 @@
-package pl.grychtol;
+package budget;
 
 import static org.junit.Assert.assertTrue;
 

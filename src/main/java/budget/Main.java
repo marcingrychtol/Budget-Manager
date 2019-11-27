@@ -1,4 +1,4 @@
-package pl.grychtol;
+package budget;
 
 /**
  * Hello world!
