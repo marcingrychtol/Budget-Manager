@@ -10,17 +10,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Main {
-
     public static void main(String[] args) {
-
         Reader reader = new Reader();
-
         while (reader.switcherNotZero()) {
             reader.showMenu();
             reader.readCommand();
             reader.action();
         }
-
     }
 }
 
@@ -33,16 +29,13 @@ class Account {
     public void printBalance() {
         System.out.println("Balance: $" + balance);
     }
-
     public double getLastIncome() {
         return lastIncome;
     }
-
     public void addIncome(String income) {
         this.lastIncome = Double.parseDouble(income);
         this.balance += this.lastIncome;
     }
-
     public void showPurchases() {
         if (this.history.isEmpty()) {
             System.out.println("Purchase list is empty");
@@ -50,14 +43,11 @@ class Account {
         }
         history.stream()
                 .forEach(System.out::println);
-
         System.out.println("Total sum: $" + totalSpend);
     }
-
     public void addPurchaseTitle(String purchase) {
         this.history.add(purchase);
     }
-
     public void addPurchasePrice(String price) {
         this.balance -= Double.parseDouble(price);
         this.totalSpend += Double.parseDouble(price);
@@ -69,20 +59,17 @@ class Account {
 class Reader {
     private Scanner scanner = new Scanner(System.in);
     private int command = 0;
+    private boolean switcher = true;
+    private Account account = new Account();
 
     public boolean switcherNotZero() {
         return switcher;
     }
-
-    private boolean switcher = true;
-    private Account account = new Account();
-
     public void readCommand() {
         this.command = scanner.nextInt();
         scanner.nextLine(); //to get rid of newline character after reading int
 
     }
-
     public void action() {
         System.out.println();
         switch (command) {
@@ -122,7 +109,6 @@ class Reader {
             }
         }
     }
-
     public void showMenu() {
         System.out.println("Choose your action:");
         System.out.println("1) Add income");
@@ -131,8 +117,6 @@ class Reader {
         System.out.println("4) Balance");
         System.out.println("0) Exit");
     }
-
-
 }
 
 
