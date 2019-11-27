@@ -10,7 +10,7 @@ public class Account {
     private List<String> history = new LinkedList<>();
 
     public void printBalance() {
-        System.out.println("Balance: $"+balance);
+        System.out.println("Balance: $" + balance);
     }
 
     public double getLastIncome() {
@@ -22,24 +22,30 @@ public class Account {
         this.lastIncome = Double.parseDouble(income);
         this.balance += this.lastIncome;
         System.out.println("Income was added!");
-
     }
 
     public void showPurchases() {
-        System.out.println(history.toString());
-        System.out.println("Total sum: $"+totalSpend);
+        if (this.history.isEmpty()) {
+            System.out.println("Purchase list is empty");
+            return;
+        }
+        history.stream()
+                .forEach(System.out::println);
+
+        System.out.println("Total sum: $" + totalSpend);
     }
 
     public void addPurchaseTitle(String purchase) {
         System.out.println("Enter purchase name:");
         this.history.add(purchase);
-        System.out.println("Income was added!");
     }
 
-    public void addPurchasePrice(String price){
+    public void addPurchasePrice(String price) {
+        System.out.println("Enter its price:");
         this.balance -= Double.parseDouble(price);
         this.totalSpend += Double.parseDouble(price);
-        this.history.get(history.size()-1).concat(price);
+        this.history.get(history.size() - 1).concat(price);
+        System.out.println("Income was added!");
     }
 }
 
