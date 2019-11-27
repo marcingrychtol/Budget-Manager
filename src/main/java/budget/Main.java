@@ -1,9 +1,5 @@
 package budget;
 
-/**
- * Hello world!
- */
-
 import java.util.Scanner;
 
 import java.util.LinkedList;
