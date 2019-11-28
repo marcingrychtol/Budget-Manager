@@ -13,12 +13,13 @@ public class Main {
     public static void main(String[] args) {
         Reader reader = new Reader();
         while (reader.switcherNotZero()) {
-            reader.showMenu();
+            reader.showMainMenu();
             reader.readCommand();
             reader.action();
         }
     }
 }
+
 
 class Account {
     private double balance = 0.0;
@@ -29,13 +30,16 @@ class Account {
     public void printBalance() {
         System.out.println("Balance: $" + balance);
     }
+
     public double getLastIncome() {
         return lastIncome;
     }
+
     public void addIncome(String income) {
         this.lastIncome = Double.parseDouble(income);
         this.balance += this.lastIncome;
     }
+
     public void showPurchases() {
         if (this.history.isEmpty()) {
             System.out.println("Purchase list is empty");
@@ -45,14 +49,26 @@ class Account {
                 .forEach(System.out::println);
         System.out.println("Total sum: $" + totalSpend);
     }
+
+    public void showPurchases(int command) {
+        if (this.history.isEmpty()) {
+            System.out.println("Purchase list is empty");
+            return;
+        }
+        history.stream()
+                .forEach(System.out::println);
+        System.out.println("Total sum: $" + totalSpend);
+    }
+
     public void addPurchaseTitle(String purchase) {
         this.history.add(purchase);
     }
+
     public void addPurchasePrice(String price) {
         this.balance -= Double.parseDouble(price);
         this.totalSpend += Double.parseDouble(price);
         String temp = this.history.get(history.size() - 1);
-        this.history.set(history.size() - 1, temp.concat(": $"+price));
+        this.history.set(history.size() - 1, temp.concat(": $" + price));
     }
 }
 
@@ -65,11 +81,16 @@ class Reader {
     public boolean switcherNotZero() {
         return switcher;
     }
-    public void readCommand() {
-        this.command = scanner.nextInt();
-        scanner.nextLine(); //to get rid of newline character after reading int
 
+    public void readCommand() {
+        String input = scanner.nextLine();
+        if (input.matches("\\d+")) { // it checks the input line contains only digits
+            this.command = Integer.parseInt(input);
+        } else {
+            System.out.println("Incorrect number: " + input);
+        }
     }
+
     public void action() {
         System.out.println();
         switch (command) {
@@ -92,9 +113,11 @@ class Reader {
                 account.addPurchasePrice(scanner.nextLine());
                 System.out.println("Purchase was added!");
                 System.out.println();
+                getRegisteredPurchaseType();
                 break;
             }
             case 3: {
+                getListedPurchaseType();
                 account.showPurchases();
                 System.out.println();
                 break;
@@ -109,7 +132,19 @@ class Reader {
             }
         }
     }
-    public void showMenu() {
+
+    private void getRegisteredPurchaseType(){
+        showRegisteredPurchaseTypeMenu();
+        readCommand();
+
+    }
+    private void getListedPurchaseType(){
+        showRegisteredPurchaseTypeMenu();
+        readCommand();
+        account.showPurchases(command);
+    }
+
+    public void showMainMenu() {
         System.out.println("Choose your action:");
         System.out.println("1) Add income");
         System.out.println("2) Add purchase");
@@ -117,6 +152,41 @@ class Reader {
         System.out.println("4) Balance");
         System.out.println("0) Exit");
     }
+
+    private void showRegisteredPurchaseTypeMenu() {
+        System.out.println("Choose the type of purchase");
+        System.out.println("1) Food");
+        System.out.println("2) Clothes");
+        System.out.println("3) Entertainment");
+        System.out.println("4) Other");
+        System.out.println("5) Back");
+    }
+
+    private void showListPurchaseTypeMenu() {
+        System.out.println("Choose the type of purchase");
+        System.out.println("1) Food");
+        System.out.println("2) Clothes");
+        System.out.println("3) Entertainment");
+        System.out.println("4) Other");
+        System.out.println("5) All");
+        System.out.println("6) Back");
+    }
 }
 
+class Purchase {
+    private Categories category;
+    private String title;
+    private Double price;
+}
 
+enum Categories {
+    FOOD("Food"),
+    CLOTHES("Clothes"),
+    ENTERTAINMENT("Entertainment"),
+    OTHER("Other");
+
+    String name;
+
+    Categories(String name) {
+    }
+}
