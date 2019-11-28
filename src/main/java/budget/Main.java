@@ -1,9 +1,5 @@
 package budget;
 
-/**
- * Hello world!
- */
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,7 +13,6 @@ public class Main {
         }
     }
 }
-
 
 class Account {
     private double balance = 0.0;
@@ -38,34 +33,41 @@ class Account {
             System.out.println("Purchase list is empty");
             return;
         }
-        if (command == 5){
+        if (command == 5) {
+            System.out.println("All: ");
             transactionHistory.stream()
                     .map(x -> x.toString())
                     .forEach(s -> System.out.println(s));
+            countTotal(transactionHistory);
+        } else {
+            temporaryHistory = transactionHistory.stream()
+                    .filter(p -> p.getCategory().getValue() == command)
+                    .collect(Collectors.toList());
+
+            System.out.println(PurchaseGroup.valueOf(command).getName() + ": ");
+            if (temporaryHistory.isEmpty()) {
+                System.out.println("Purchase list is empty");
+                return;
+            }
+
+            temporaryHistory.stream()
+                    .map(x -> x.toString())
+                    .forEach(s -> System.out.println(s));
+
+            countTotal(temporaryHistory);
         }
-        temporaryHistory = transactionHistory.stream()
-                .filter(p -> p.getCategory().getValue() == command)
-                .collect(Collectors.toList());
-
-        System.out.println(PurchaseGroup.valueOf(command).getName() + ": ");
-        if (temporaryHistory.isEmpty()) {
-            System.out.println("Purchase list is empty");
-            return;
-        }
-
-        temporaryHistory.stream()
-                .map(x -> x.toString())
-                .forEach(s -> System.out.println(s));
-
-        groupTotalSpend = temporaryHistory.stream()
-                .map(x -> x.getPrice())
-                .collect(Collectors.summingDouble(Double::doubleValue));
 
         System.out.println("Total sum: $" + groupTotalSpend);
     }
 
     public void addPurchase(Purchase purchase) {
         this.transactionHistory.add(purchase);
+    }
+
+    private void countTotal(List<Purchase> list) {
+        groupTotalSpend = list.stream()
+                .map(x -> x.getPrice())
+                .collect(Collectors.summingDouble(Double::doubleValue));
     }
 //
 //    public void addPurchasePrice(String price) {
