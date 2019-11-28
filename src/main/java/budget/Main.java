@@ -5,14 +5,15 @@ package budget;
  */
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        Reader reader = new Reader();
-        while (reader.switcherNotZero()) {
-            reader.showMainMenu();
-            reader.readCommand();
-            reader.action();
+        Teller teller = new Teller();
+        while (teller.switcherNotZero()) {
+            teller.showMainMenu();
+            teller.readCommand();
+            teller.action();
         }
     }
 }
@@ -20,8 +21,9 @@ public class Main {
 
 class Account {
     private double balance = 0.0;
-    private double totalSpend = 0.0;
-    private List<Purchase> history = new LinkedList<>();
+    private double groupTotalSpend = 0.0;
+    private List<Purchase> transactionHistory = new LinkedList<>();
+    private List<Purchase> temporaryHistory = new LinkedList<>();
 
     public void printBalance() {
         System.out.println("Balance: $" + balance);
@@ -31,28 +33,30 @@ class Account {
         this.balance += Double.parseDouble(income);
     }
 
-    public void showPurchases() {
-        if (this.history.isEmpty()) {
-            System.out.println("Purchase list is empty");
-            return;
-        }
-        history.stream()
-                .forEach(System.out::println);
-        System.out.println("Total sum: $" + totalSpend);
-    }
-
     public void showPurchases(int command) {
-        if (this.history.isEmpty()) {
+        if (this.transactionHistory.isEmpty()) {
             System.out.println("Purchase list is empty");
             return;
         }
-        history.stream()
-                .forEach(System.out::println);
-        System.out.println("Total sum: $" + totalSpend);
+        temporaryHistory = transactionHistory.stream()
+                .filter(p -> p.getCategory().getValue() == command)
+                .collect(Collectors.toList());
+
+        System.out.println(PurchaseGroup.valueOf(command-1).getName()+": ");
+        if (temporaryHistory.isEmpty()){
+            System.out.println("Purchase list is empty");
+            return;
+        }
+        
+        groupTotalSpend = temporaryHistory.stream()
+                .map(x -> x.getPrice())
+                .collect(Collectors.summingDouble(Double::doubleValue));
+        
+        System.out.println("Total sum: $" + groupTotalSpend);
     }
 
     public void addPurchase(Purchase purchase) {
-        this.history.add(purchase);
+        this.transactionHistory.add(purchase);
     }
 //
 //    public void addPurchasePrice(String price) {
@@ -63,7 +67,7 @@ class Account {
 //    }
 }
 
-class Reader {
+class Teller {
     private Scanner scanner = new Scanner(System.in);
     private int command = 0;
     private boolean switcher = true;
@@ -115,7 +119,7 @@ class Reader {
             }
             case 3: {
                 getListedPurchaseType();
-                account.showPurchases();
+                account.showPurchases(command);
                 System.out.println();
                 break;
             }
@@ -199,6 +203,11 @@ class Purchase {
     public void setPrice(String price) {
         this.price = Double.parseDouble(price);
     }
+
+    @Override
+    public String toString() {
+        return title + " $" + price;
+    }
 }
 
 enum PurchaseGroup {
@@ -220,6 +229,13 @@ enum PurchaseGroup {
 
     public static PurchaseGroup valueOf(int category) {
         return (PurchaseGroup) map.get(category);
+    }
+
+    public int getValue(){
+        return this.value;
+    }
+    public String getName(){
+        return this.name;
     }
 
     private PurchaseGroup(int value, String name) {
