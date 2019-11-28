@@ -38,6 +38,11 @@ class Account {
             System.out.println("Purchase list is empty");
             return;
         }
+        if (command == 5){
+            transactionHistory.stream()
+                    .map(x -> x.toString())
+                    .forEach(s -> System.out.println(s));
+        }
         temporaryHistory = transactionHistory.stream()
                 .filter(p -> p.getCategory().getValue() == command)
                 .collect(Collectors.toList());
@@ -125,19 +130,27 @@ class Teller {
 
                     System.out.println("Purchase was added!");
                     System.out.println();
-                } break;
+                }
+                break;
 
             }
             case 3: {
-                if (account.transactionHistory.isEmpty()) {
-                    System.out.println("Purchase list is empty!");
+                while (true) {
+                    if (account.transactionHistory.isEmpty()) {
+                        System.out.println("Purchase list is empty!");
+                        System.out.println();
+                        return;
+                    }
+                    menuListPurchasesByCategory();
+                    readCommand();
+                    if (command == 6) {
+                        System.out.println();
+                        break;
+                    }
                     System.out.println();
-                    return;
+                    account.showPurchases(command);
+                    System.out.println();
                 }
-                menuListPurchasesByCategory();
-                readCommand();
-                account.showPurchases(command);
-                System.out.println();
                 break;
             }
             case 4: {
