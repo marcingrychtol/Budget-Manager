@@ -4,10 +4,7 @@ package budget;
  * Hello world!
  */
 
-import java.util.Scanner;
-
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -24,20 +21,14 @@ public class Main {
 class Account {
     private double balance = 0.0;
     private double totalSpend = 0.0;
-    private double lastIncome = 0.0;
-    private List<String> history = new LinkedList<>();
+    private List<Purchase> history = new LinkedList<>();
 
     public void printBalance() {
         System.out.println("Balance: $" + balance);
     }
 
-    public double getLastIncome() {
-        return lastIncome;
-    }
-
     public void addIncome(String income) {
-        this.lastIncome = Double.parseDouble(income);
-        this.balance += this.lastIncome;
+        this.balance += Double.parseDouble(income);
     }
 
     public void showPurchases() {
@@ -60,16 +51,16 @@ class Account {
         System.out.println("Total sum: $" + totalSpend);
     }
 
-    public void addPurchaseTitle(String purchase) {
+    public void addPurchase(Purchase purchase) {
         this.history.add(purchase);
     }
-
-    public void addPurchasePrice(String price) {
-        this.balance -= Double.parseDouble(price);
-        this.totalSpend += Double.parseDouble(price);
-        String temp = this.history.get(history.size() - 1);
-        this.history.set(history.size() - 1, temp.concat(": $" + price));
-    }
+//
+//    public void addPurchasePrice(String price) {
+//        this.balance -= Double.parseDouble(price);
+//        this.totalSpend += Double.parseDouble(price);
+//        String temp = this.history.get(history.size() - 1);
+//        this.history.set(history.size() - 1, temp.concat(": $" + price));
+//    }
 }
 
 class Reader {
@@ -107,13 +98,19 @@ class Reader {
                 break;
             }
             case 2: {
+                Purchase purchase = new Purchase();
                 System.out.println("Enter purchase name:");
-                account.addPurchaseTitle(scanner.nextLine());
+                purchase.setTitle(scanner.nextLine());
                 System.out.println("Enter its price:");
-                account.addPurchasePrice(scanner.nextLine());
+                purchase.setPrice(scanner.nextLine());
                 System.out.println("Purchase was added!");
                 System.out.println();
                 getRegisteredPurchaseType();
+                if (command == 5) {
+                    return;
+                }
+                purchase.setCategory(command);
+                account.addPurchase(purchase);
                 break;
             }
             case 3: {
@@ -133,12 +130,13 @@ class Reader {
         }
     }
 
-    private void getRegisteredPurchaseType(){
+    private int getRegisteredPurchaseType() {
         showRegisteredPurchaseTypeMenu();
         readCommand();
-
+        return command;
     }
-    private void getListedPurchaseType(){
+
+    private void getListedPurchaseType() {
         showRegisteredPurchaseTypeMenu();
         readCommand();
         account.showPurchases(command);
@@ -174,19 +172,59 @@ class Reader {
 }
 
 class Purchase {
-    private Categories category;
+    private PurchaseGroup category;
     private String title;
     private Double price;
+
+    public PurchaseGroup getCategory() {
+        return category;
+    }
+
+    public void setCategory(int command) {
+        this.category = PurchaseGroup.valueOf(command);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = Double.parseDouble(price);
+    }
 }
 
-enum Categories {
-    FOOD("Food"),
-    CLOTHES("Clothes"),
-    ENTERTAINMENT("Entertainment"),
-    OTHER("Other");
+enum PurchaseGroup {
+    FOOD(1, "Food"),
+    CLOTHES(2, "Clothes"),
+    ENTERTAINMENT(3, "Entertainment"),
+    OTHER(4, "Other");
 
-    String name;
+    private String name;
+    private int value;
 
-    Categories(String name) {
+    private static Map map = new HashMap();
+
+    static {
+        for (PurchaseGroup category : PurchaseGroup.values()) {
+            map.put(category.value, category);
+        }
     }
+
+    public static PurchaseGroup valueOf(int category) {
+        return (PurchaseGroup) map.get(category);
+    }
+
+    private PurchaseGroup(int value, String name) {
+        this.value = value;
+        this.name = name;
+    }
+
 }
