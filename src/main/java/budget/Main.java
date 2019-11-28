@@ -22,7 +22,7 @@ public class Main {
 class Account {
     private double balance = 0.0;
     private double groupTotalSpend = 0.0;
-    private List<Purchase> transactionHistory = new LinkedList<>();
+    protected List<Purchase> transactionHistory = new LinkedList<>();
     private List<Purchase> temporaryHistory = new LinkedList<>();
 
     public void printBalance() {
@@ -42,16 +42,20 @@ class Account {
                 .filter(p -> p.getCategory().getValue() == command)
                 .collect(Collectors.toList());
 
-        System.out.println(PurchaseGroup.valueOf(command-1).getName()+": ");
-        if (temporaryHistory.isEmpty()){
+        System.out.println(PurchaseGroup.valueOf(command).getName() + ": ");
+        if (temporaryHistory.isEmpty()) {
             System.out.println("Purchase list is empty");
             return;
         }
-        
+
+        temporaryHistory.stream()
+                .map(x -> x.toString())
+                .forEach(s -> System.out.println(s));
+
         groupTotalSpend = temporaryHistory.stream()
                 .map(x -> x.getPrice())
                 .collect(Collectors.summingDouble(Double::doubleValue));
-        
+
         System.out.println("Total sum: $" + groupTotalSpend);
     }
 
@@ -102,23 +106,36 @@ class Teller {
                 break;
             }
             case 2: {
-                Purchase purchase = new Purchase();
-                System.out.println("Enter purchase name:");
-                purchase.setTitle(scanner.nextLine());
-                System.out.println("Enter its price:");
-                purchase.setPrice(scanner.nextLine());
-                System.out.println("Purchase was added!");
-                System.out.println();
-                getRegisteredPurchaseType();
-                if (command == 5) {
-                    return;
-                }
-                purchase.setCategory(command);
-                account.addPurchase(purchase);
-                break;
+                while (true) {
+                    Purchase purchase = new Purchase();
+                    menuClassifyPurchase();
+                    readCommand();
+                    if (command == 5) {
+                        System.out.println();
+                        break;
+                    }
+                    purchase.setCategory(command);
+                    System.out.println();
+                    System.out.println("Enter purchase name:");
+                    purchase.setTitle(scanner.nextLine());
+                    System.out.println("Enter its price:");
+                    purchase.setPrice(scanner.nextLine());
+
+                    account.addPurchase(purchase);
+
+                    System.out.println("Purchase was added!");
+                    System.out.println();
+                } break;
+
             }
             case 3: {
-                getListedPurchaseType();
+                if (account.transactionHistory.isEmpty()) {
+                    System.out.println("Purchase list is empty!");
+                    System.out.println();
+                    return;
+                }
+                menuListPurchasesByCategory();
+                readCommand();
                 account.showPurchases(command);
                 System.out.println();
                 break;
@@ -134,18 +151,6 @@ class Teller {
         }
     }
 
-    private int getRegisteredPurchaseType() {
-        showRegisteredPurchaseTypeMenu();
-        readCommand();
-        return command;
-    }
-
-    private void getListedPurchaseType() {
-        showRegisteredPurchaseTypeMenu();
-        readCommand();
-        account.showPurchases(command);
-    }
-
     public void showMainMenu() {
         System.out.println("Choose your action:");
         System.out.println("1) Add income");
@@ -155,7 +160,7 @@ class Teller {
         System.out.println("0) Exit");
     }
 
-    private void showRegisteredPurchaseTypeMenu() {
+    private void menuClassifyPurchase() {
         System.out.println("Choose the type of purchase");
         System.out.println("1) Food");
         System.out.println("2) Clothes");
@@ -164,7 +169,7 @@ class Teller {
         System.out.println("5) Back");
     }
 
-    private void showListPurchaseTypeMenu() {
+    private void menuListPurchasesByCategory() {
         System.out.println("Choose the type of purchase");
         System.out.println("1) Food");
         System.out.println("2) Clothes");
@@ -231,10 +236,11 @@ enum PurchaseGroup {
         return (PurchaseGroup) map.get(category);
     }
 
-    public int getValue(){
+    public int getValue() {
         return this.value;
     }
-    public String getName(){
+
+    public String getName() {
         return this.name;
     }
 
