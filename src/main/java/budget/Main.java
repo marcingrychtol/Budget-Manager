@@ -1,6 +1,5 @@
 package budget;
 
-
 import budget.utils.Menu;
 
 public class Main {
