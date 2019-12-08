@@ -12,6 +12,9 @@ import java.util.stream.Collectors;
 
 public class Menu {
 
+    public static Menu menu = new Menu();
+    private Menu(){}
+
     private Scanner scanner = new Scanner(System.in);
     private int command = 0;
     private boolean switcher = true;
