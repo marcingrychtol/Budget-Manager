@@ -12,6 +12,15 @@ import java.util.stream.Collectors;
 
 public class Menu {
 
+    public static final int C_EXIT = 0;
+    public static final int C_ENTER_INCOME = 1;
+    public static final int C_ADD_PURCHASE = 2;
+    public static final int C_LIST_PURCHASES = 3;
+    public static final int C_SHOW_BALANCE = 4;
+    public static final int C_SAVE = 5;
+    public static final int C_LOAD = 6;
+    public static final int C_ANALYZE = 7;
+
     public static Menu menu = new Menu();
     private Menu(){}
 
@@ -90,10 +99,10 @@ public class Menu {
     public void actionMain() {
 
         switch (command) {
-            case 0:
+            case C_EXIT:
                 switcher = false;
                 return;
-            case 1: {
+            case C_ENTER_INCOME: {
                 System.out.println("Enter income:");
                 account.addIncome(scanner.nextLine());
                 System.out.println("Income was added!");
@@ -101,7 +110,7 @@ public class Menu {
                 break;
             }// ENTER INCOME
 
-            case 2: {
+            case C_ADD_PURCHASE: {
                 while (true) {
                     showMenu_SetPurchaseCatToSave();
                     readCommand();
@@ -125,7 +134,7 @@ public class Menu {
                 break;
             }// ADD PURCHASE
 
-            case 3: {
+            case C_LIST_PURCHASES: {
                 while (true) {
                     if (account.getTransactionHistory(5).isEmpty()) {
                         System.out.println("Purchase list is empty!");
@@ -143,13 +152,13 @@ public class Menu {
                 break;
             }// LIST PURCHASES
 
-            case 4: {
+            case C_SHOW_BALANCE: {
                 System.out.println("Balance: $" + account.getBalance());
                 System.out.println();
                 break;
             }// SHOW BALANCE
 
-            case 5: {
+            case C_SAVE: {
                 if (account.save()) {
                     System.out.println("History saved succesfully!");
                 } else {
@@ -158,7 +167,7 @@ public class Menu {
                 break;
             }// SAVING
 
-            case 6: {
+            case C_LOAD: {
                 if (account.load()) {
                     System.out.println("Purchases were loaded!");
                     System.out.println();
@@ -168,7 +177,7 @@ public class Menu {
                 break;
             }// LOADING
 
-            case 7: {
+            case C_ANALYZE: {
                 while (true) {
                     showMenu_ChooseAnalyzeStrategy();
                     readCommand();
